@@ -1,0 +1,16 @@
+{{- /*
+  Prefixes a root-relative URL with the baseURL's path.
+
+  `relURL` does not do this: given "/lectures/x/" it returns "/lectures/x/"
+  unchanged, because a leading slash is already treated as rooted. On a site
+  published under a subpath — a GitHub Pages project site, say — that 404s.
+
+  Usage:  {{ partial "rel.html" "/projects/project-1/" }}
+  Passes through absolute URLs, protocol-relative URLs, and relative paths.
+*/ -}}
+{{- $u := . -}}
+{{- if and (hasPrefix $u "/") (not (hasPrefix $u "//")) -}}
+  {{- $base := (urls.Parse site.BaseURL).Path | strings.TrimSuffix "/" -}}
+  {{- $u = printf "%s%s" $base $u -}}
+{{- end -}}
+{{- return $u -}}

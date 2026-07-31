@@ -1,7 +1,3 @@
 {{- /* Same subpath fix as render-link.html, for images. */ -}}
-{{- $u := .Destination -}}
-{{- if and (hasPrefix $u "/") (not (hasPrefix $u "//")) -}}
-  {{- $u = $u | relURL -}}
-{{- end -}}
-<img src="{{ $u }}" alt="{{ .PlainText }}"
+<img src="{{ partial "rel.html" .Destination }}" alt="{{ .PlainText }}"
   {{- with .Title }} title="{{ . }}"{{ end }} loading="lazy">

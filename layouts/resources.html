@@ -14,7 +14,7 @@
       {{ range .items }}
       <div>
         {{ if .url }}
-          <a class="resource__name" href="{{ .url }}"{{ if strings.HasPrefix .url "http" }} rel="noopener"{{ end }}>{{ .name }}</a>
+          <a class="resource__name" href="{{ partial "rel.html" .url }}"{{ if strings.HasPrefix .url "http" }} rel="noopener"{{ end }}>{{ .name }}</a>
         {{ else }}
           <span class="resource__name">{{ .name }}</span>
         {{ end }}
