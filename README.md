@@ -4,6 +4,10 @@ A Hugo theme for course websites, built from the "Console" design variation:
 terminal-descended, monospace, dark, dense. One accent colour repaints the whole
 site, so the same theme can carry every course you teach.
 
+> Unrelated to [hugo-theme-console](https://github.com/mrmierzejewski/hugo-theme-console),
+> which shares the terminal aesthetic and the name but is a blog and portfolio
+> theme. This one is built for semesters: schedule, projects, syllabus, resources.
+
 ![Console](https://img.shields.io/badge/hugo-%E2%89%A5%200.146-blue)
 
 ## What it gives you
