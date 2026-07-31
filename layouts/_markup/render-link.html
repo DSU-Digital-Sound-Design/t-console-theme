@@ -1,0 +1,12 @@
+{{- /* Root-relative links written in content (`/projects/project-1/`) would
+       otherwise skip the baseURL path, which breaks every internal link on a
+       site published to a subpath — GitHub Pages project sites, for one.
+       Run them through relURL; leave absolute and relative URLs alone. */ -}}
+{{- $u := .Destination -}}
+{{- if and (hasPrefix $u "/") (not (hasPrefix $u "//")) -}}
+  {{- $u = $u | relURL -}}
+{{- end -}}
+<a href="{{ $u }}"
+  {{- with .Title }} title="{{ . }}"{{ end }}
+  {{- if or (hasPrefix .Destination "http://") (hasPrefix .Destination "https://") }} rel="noopener"{{ end -}}
+>{{ .Text }}</a>

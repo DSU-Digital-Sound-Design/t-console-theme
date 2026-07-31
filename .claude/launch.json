@@ -6,6 +6,12 @@
       "runtimeExecutable": "hugo",
       "runtimeArgs": ["server", "--source", "exampleSite", "--port", "1313", "--disableFastRender"],
       "port": 1313
+    },
+    {
+      "name": "f-26",
+      "runtimeExecutable": "hugo",
+      "runtimeArgs": ["server", "--source", "/Users/tate.carson/Developer/f-26-DAD-222-Audio-Production-I", "--port", "1314", "--disableFastRender"],
+      "port": 1314
     }
   ]
 }
