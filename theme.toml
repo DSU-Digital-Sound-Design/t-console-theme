@@ -1,9 +1,9 @@
 name = "Console"
 license = "MIT"
-licenselink = "https://github.com/tatecarson/t-console-theme/blob/main/LICENSE"
+licenselink = "https://github.com/DSU-Digital-Sound-Design/t-console-theme/blob/main/LICENSE"
 description = "A terminal-descended Hugo theme for course websites. Dense schedule with instant filtering, tag chips, collapsible weeks, and a / command palette."
-homepage = "https://github.com/tatecarson/t-console-theme"
-demosite = "https://github.com/tatecarson/t-console-theme"
+homepage = "https://github.com/DSU-Digital-Sound-Design/t-console-theme"
+demosite = "https://github.com/DSU-Digital-Sound-Design/t-console-theme"
 tags = ["course", "syllabus", "schedule", "dark", "monospace", "education", "teaching"]
 features = ["schedule", "projects", "syllabus", "resources", "command palette", "no javascript fallback"]
 min_version = "0.146.0"

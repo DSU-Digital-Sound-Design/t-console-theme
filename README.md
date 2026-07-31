@@ -28,7 +28,7 @@ every page is fully readable; JS only adds filtering, collapsing, and the palett
 ```bash
 hugo new site my-course && cd my-course
 git init
-git submodule add https://github.com/tatecarson/t-console-theme themes/t-console-theme
+git submodule add https://github.com/DSU-Digital-Sound-Design/t-console-theme themes/t-console-theme
 ```
 
 Then set `theme = "t-console-theme"` in your config and copy `exampleSite/` as a
