@@ -1,0 +1,70 @@
+{{- $c := partialCached "schedule-ctx.html" . -}}
+
+{{- /* Both sections are found by role, not by name: the schedule is the page
+       using `layout: schedule`, and the projects section is the one whose type
+       is `projects`. Rename either folder and this still resolves. */ -}}
+{{- $schedURL := "" -}}
+{{- range site.RegularPages -}}
+  {{- if and (eq $schedURL "") (eq .Layout "schedule") }}{{ $schedURL = .RelPermalink }}{{ end -}}
+{{- end -}}
+{{- if eq $schedURL "" -}}
+  {{- with site.GetPage "/schedule" }}{{ $schedURL = .RelPermalink }}{{ end -}}
+{{- end -}}
+
+{{- $projects := "" -}}
+{{- range site.Sections -}}
+  {{- if and (not $projects) (eq .Type "projects") }}{{ $projects = . }}{{ end -}}
+{{- end -}}
+{{- if not $projects }}{{ $projects = site.GetPage "/projects" }}{{ end -}}
+
+{{- $index := slice -}}
+
+{{- range site.Menus.main -}}
+  {{- $index = $index | append (dict "kind" "page" "label" (string .Name) "url" .URL "hint" "") -}}
+{{- end -}}
+
+{{- with $projects -}}
+  {{- range .Pages.ByWeight -}}
+    {{- $due := "" -}}
+    {{- with .Params.due }}{{ $due = printf "due %s" ((time.AsTime .).Format "Jan 2") }}{{ end -}}
+    {{- $index = $index | append (dict
+          "kind" "project"
+          "label" (printf "%s — %s" (partial "project-number.html" .) .Title)
+          "url" .RelPermalink
+          "hint" $due) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- with $schedURL -}}
+  {{- range $c.weeks -}}
+    {{- $url := printf "%s?week=%d" $schedURL .n -}}
+    {{- $index = $index | append (dict
+          "kind" "week"
+          "label" (printf "Week %s — %s" .nn .dates)
+          "alt" (printf "week %d" .n)
+          "url" $url
+          "hint" "") -}}
+    {{- range $d := .days -}}
+      {{- range $d.items -}}
+        {{- $index = $index | append (dict
+              "kind" (cond (eq .tag "") "item" .tag)
+              "label" .plain
+              "url" $url
+              "hint" (printf "%s %s" $d.label $d.short)) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+<script type="application/json" id="console-index">{{ $index | jsonify | safeJS }}</script>
+
+<div class="palette" id="palette" role="dialog" aria-modal="true" aria-label="Jump to" hidden>
+  <div class="palette__box">
+    <label class="visually-hidden" for="palette-q">Jump to a week, project, or lecture</label>
+    <input class="palette__field" id="palette-q" type="text" autocomplete="off" spellcheck="false"
+           placeholder="jump to a week, project, or lecture…"
+           role="combobox" aria-expanded="true" aria-controls="palette-list" aria-autocomplete="list">
+    <ul class="palette__list" id="palette-list" role="listbox" aria-label="Results"></ul>
+    <div class="palette__foot">↑↓ to move · enter to open · esc to close</div>
+  </div>
+</div>

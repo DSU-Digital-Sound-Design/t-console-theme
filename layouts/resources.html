@@ -1,0 +1,28 @@
+{{ define "main" }}
+{{- /* Which data file to read, without the extension. */ -}}
+{{- $key := site.Params.resourcesData | default "resources" -}}
+{{- $groups := slice -}}
+{{- with index site.Data $key }}{{ with .groups }}{{ $groups = . }}{{ end }}{{ end -}}
+<div class="wrap">
+  <h1 class="page-title">{{ .Title }}</h1>
+  {{ with .Content }}<div class="prose" style="margin:14px 0 26px">{{ . }}</div>{{ else }}<div style="height:26px"></div>{{ end }}
+
+  {{ range $groups }}
+  <section class="resgroup">
+    <h2 class="resgroup__name">{{ .group }}</h2>
+    <div class="resgroup__items">
+      {{ range .items }}
+      <div>
+        {{ if .url }}
+          <a class="resource__name" href="{{ .url }}"{{ if strings.HasPrefix .url "http" }} rel="noopener"{{ end }}>{{ .name }}</a>
+        {{ else }}
+          <span class="resource__name">{{ .name }}</span>
+        {{ end }}
+        {{ with .desc }}<div class="resource__desc">{{ . }}</div>{{ end }}
+      </div>
+      {{ end }}
+    </div>
+  </section>
+  {{ end }}
+</div>
+{{ end }}

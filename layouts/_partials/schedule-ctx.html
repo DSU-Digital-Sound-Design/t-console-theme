@@ -1,0 +1,295 @@
+{{- /*
+  Parses content/schedule.md into everything the schedule needs.
+
+  Format:
+    ## 8/25                    a class day. Also accepts 8/25/2025 or 2025-08-25.
+    - plain item               untagged
+    - [slides] Sound and hearing
+    - [due] Project 3 by midnight
+      - indented bullets       detail notes under the item above
+    ### Critique session       a sub-heading renders as an untagged item
+    Item text is inline Markdown, so links and emphasis work.
+    Anything before the first `##` is intro prose.
+    Lines inside a day that are none of the above are skipped with a warning.
+
+  Week numbers and date ranges are derived from params.schedule.start.
+
+  Returns a dict:
+    today    string   "2006-01-02" — build date, or params.schedule.today
+    current  int      week containing today (or the next one up)
+    total    int      item count across the semester
+    counts   dict     item count per tag
+    intro    string   Markdown before the first day heading
+    weeks    slice    n nn dates start end isCurrent summary notable days
+    nextUp   slice    up to three cards: kicker title meta
+*/ -}}
+
+{{- $tagDefs := partialCached "schedule-tags.html" . -}}
+{{- $tags := apply $tagDefs "index" "." "id" -}}
+{{- $skipTags := apply (where $tagDefs "skip" true) "index" "." "id" -}}
+
+{{- /* The schedule is whichever page uses `layout: schedule`, so renaming the
+       section needs no configuration. */ -}}
+{{- $page := "" -}}
+{{- range site.RegularPages -}}
+  {{- if and (not $page) (eq .Layout "schedule") }}{{ $page = . }}{{ end -}}
+{{- end -}}
+{{- if not $page }}{{ $page = site.GetPage "/schedule" }}{{ end -}}
+
+{{- $raw := "" -}}
+{{- with $page }}{{ $raw = .RawContent }}{{ end -}}
+
+{{- $today := now -}}
+{{- with site.Params.schedule.today }}{{ $today = time.AsTime . "UTC" }}{{ end -}}
+{{- $iso := $today.Format "2006-01-02" -}}
+
+{{- /* Semester start. Should be the Monday of week 1. */ -}}
+{{- $startISO := "" -}}
+{{- with site.Params.schedule.start }}{{ $startISO = (time.AsTime . "UTC").Format "2006-01-02" }}{{ end -}}
+{{- $startYear := 0 -}}
+{{- with $startISO }}{{ $startYear = (time.AsTime . "UTC").Year }}{{ end -}}
+
+{{- /* ------------------------------------------------------- parse lines */ -}}
+
+{{- $sc := newScratch -}}
+{{- $sc.Set "total" 0 -}}
+
+{{- $days := slice -}}
+{{- $intro := slice -}}
+{{- $cur := false -}}
+{{- $started := false -}}
+
+{{- range $line := (split (replace $raw "\r\n" "\n") "\n") -}}
+  {{- $t := trim $line " \t" -}}
+
+  {{- if hasPrefix $t "## " -}}
+    {{- if $cur }}{{ $days = $days | append $cur }}{{ end -}}
+    {{- $started = true -}}
+
+    {{- /* First token only, so `## 10/6 — studio day` still parses. */ -}}
+    {{- $h := index (split (trim (strings.TrimPrefix "## " $t) " ") " ") 0 -}}
+    {{- $dIso := "" -}}
+    {{- if in $h "-" -}}
+      {{- $dIso = (time.AsTime $h "UTC").Format "2006-01-02" -}}
+    {{- else if in $h "/" -}}
+      {{- $p := split $h "/" -}}
+      {{- $m := int (index $p 0) -}}
+      {{- $d := int (index $p 1) -}}
+      {{- if ge (len $p) 3 -}}
+        {{- $dIso = printf "%04d-%02d-%02d" (int (index $p 2)) $m $d -}}
+      {{- else -}}
+        {{- $dIso = printf "%04d-%02d-%02d" $startYear $m $d -}}
+        {{- /* A term that crosses New Year rolls into the following year. */ -}}
+        {{- if and (ne $startISO "") (lt $dIso $startISO) -}}
+          {{- $dIso = printf "%04d-%02d-%02d" (add $startYear 1) $m $d -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+
+    {{- $cur = dict "iso" $dIso "items" slice -}}
+
+  {{- else if and $cur (or (hasPrefix $t "- ") (hasPrefix $t "* ") (hasPrefix $t "+ ")) -}}
+    {{- $body := trim (substr $t 2) " " -}}
+    {{- $lead := sub (len $line) (len (strings.TrimLeft " \t" $line)) -}}
+
+    {{- if and (gt $lead 0) $cur.items -}}
+      {{- /* An indented bullet is detail hanging off the item above it. */ -}}
+      {{- $its := $cur.items -}}
+      {{- $last := index $its (sub (len $its) 1) -}}
+      {{- $last = merge $last (dict "notes" ($last.notes | append
+            ($page.RenderString (dict "display" "inline") $body))) -}}
+      {{- $cur = merge $cur (dict "items"
+            ((first (sub (len $its) 1) $its) | append $last)) -}}
+    {{- else -}}
+
+    {{- $tag := "" -}}
+    {{- range $k := $tags -}}
+      {{- $pfx := printf "[%s]" $k -}}
+      {{- if and (eq $tag "") (hasPrefix $body $pfx) -}}
+        {{- $rest := trim (strings.TrimPrefix $pfx $body) " " -}}
+        {{- /* `[due](…)` is a Markdown link, not a tag. */ -}}
+        {{- if not (hasPrefix $rest "(") -}}
+          {{- $tag = $k -}}
+          {{- $body = $rest -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+
+    {{- /* `[reading] …` when "reading" is not configured would otherwise render
+           as literal text and look like an author typo. Say so instead. */ -}}
+    {{- if eq $tag "" -}}
+      {{- with findRE `^\[[a-zA-Z0-9_-]+\]\s` $body 1 -}}
+        {{- warnf "schedule: %q is not a configured tag — add it to params.schedule.tags, or remove the brackets (item: %q)"
+              (trim (index . 0) " []") $body -}}
+      {{- end -}}
+    {{- end -}}
+
+    {{- $sc.Add "total" 1 -}}
+    {{- with $tag }}{{ $sc.Add (printf "c_%s" .) 1 }}{{ end -}}
+
+    {{- $items := $cur.items | append (dict
+          "text" ($page.RenderString (dict "display" "inline") $body)
+          "plain" (trim (htmlUnescape (plainify ($page.RenderString (dict "display" "inline") $body))) " \n")
+          "tag" $tag
+          "notes" slice
+          "label" (cond (eq $tag "") "·" $tag)) -}}
+    {{- $cur = merge $cur (dict "items" $items) -}}
+    {{- end -}}
+
+  {{- else if and $cur (hasPrefix $t "### ") -}}
+    {{- $body := trim (strings.TrimPrefix "### " $t) " " -}}
+    {{- $sc.Add "total" 1 -}}
+    {{- $cur = merge $cur (dict "items" ($cur.items | append (dict
+          "text" ($page.RenderString (dict "display" "inline") $body)
+          "plain" (trim (htmlUnescape (plainify ($page.RenderString (dict "display" "inline") $body))) " \n")
+          "tag" ""
+          "notes" slice
+          "label" "·"))) -}}
+
+  {{- else if and (not $started) (ne $t "") -}}
+    {{- $intro = $intro | append $line -}}
+
+  {{- else if and $cur (ne $t "") (not (hasPrefix $t "<!--")) -}}
+    {{- warnf "schedule: skipped unrecognised line %q — only ## / ### headings and bullets are read" $t -}}
+  {{- end -}}
+{{- end -}}
+{{- if $cur }}{{ $days = $days | append $cur }}{{ end -}}
+
+{{- $days = where (sort $days "iso") "iso" "!=" "" -}}
+{{- if not $startISO }}{{ with $days }}{{ $startISO = (index . 0).iso }}{{ end }}{{ end -}}
+
+{{- /* ------------------------------------------- assign days to weeks */ -}}
+
+{{- $startT := 0 -}}
+{{- with $startISO }}{{ $startT = (time.AsTime . "UTC").Unix }}{{ end -}}
+
+{{- $tagged := slice -}}
+{{- $maxWeek := 0 -}}
+{{- range $d := $days -}}
+  {{- $dt := time.AsTime $d.iso "UTC" -}}
+  {{- $off := div (sub $dt.Unix $startT) 86400 -}}
+  {{- $wn := cond (lt $off 0) 1 (add 1 (div $off 7)) -}}
+  {{- if gt $wn $maxWeek }}{{ $maxWeek = $wn }}{{ end -}}
+  {{- $tagged = $tagged | append (merge $d (dict
+        "wn" $wn
+        "label" ($dt.Format "Mon")
+        "short" ($dt.Format "1/2")
+        "isToday" (eq $d.iso $iso))) -}}
+{{- end -}}
+
+{{- $weeks := slice -}}
+{{- range $n := (seq 1 (cond (gt $maxWeek 0) $maxWeek 1)) -}}
+  {{- $wdays := where $tagged "wn" $n -}}
+  {{- if $wdays -}}
+    {{- $first := index $wdays 0 -}}
+    {{- $last := index $wdays (sub (len $wdays) 1) -}}
+    {{- $ft := time.AsTime $first.iso "UTC" -}}
+    {{- $lt := time.AsTime $last.iso "UTC" -}}
+    {{- $range := "" -}}
+    {{- if eq $first.iso $last.iso -}}
+      {{- $range = printf "%s %d" ($ft.Format "Jan") $ft.Day -}}
+    {{- else if eq ($ft.Format "Jan") ($lt.Format "Jan") -}}
+      {{- $range = printf "%s %d–%d" ($ft.Format "Jan") $ft.Day $lt.Day -}}
+    {{- else -}}
+      {{- $range = printf "%s %d – %s %d" ($ft.Format "Jan") $ft.Day ($lt.Format "Jan") $lt.Day -}}
+    {{- end -}}
+
+    {{- $heads := slice -}}
+    {{- range $wdays }}{{ with .items }}{{ $heads = $heads | append (index . 0).plain }}{{ end }}{{ end -}}
+
+    {{- /* For the "Coming up" card: the first thing that actually happens,
+           skipping tags flagged as non-events (No class, and friends). */ -}}
+    {{- $notable := "" -}}
+    {{- range $wdays }}{{ range .items -}}
+      {{- if and (eq $notable "") (not (in $skipTags .tag)) }}{{ $notable = .plain }}{{ end -}}
+    {{ end }}{{ end -}}
+
+    {{- $weeks = $weeks | append (dict
+          "n" $n
+          "nn" (printf "%02d" $n)
+          "dates" $range
+          "start" $first.iso
+          "end" $last.iso
+          "summary" (delimit (first 2 $heads) " · ")
+          "notable" $notable
+          "days" $wdays) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* Which week are we in? Falls forward to the next one during breaks. */ -}}
+{{- $current := 0 -}}
+{{- range $w := $weeks -}}
+  {{- if and (eq $current 0) (ge $iso $w.start) (le $iso $w.end) }}{{ $current = $w.n }}{{ end -}}
+{{- end -}}
+{{- if eq $current 0 -}}
+  {{- range $w := $weeks -}}
+    {{- if and (eq $current 0) (gt $w.start $iso) }}{{ $current = $w.n }}{{ end -}}
+  {{- end -}}
+{{- end -}}
+{{- if and (eq $current 0) $weeks -}}
+  {{- $current = (index $weeks (sub (len $weeks) 1)).n -}}
+{{- end -}}
+
+{{- $out := slice -}}
+{{- range $w := $weeks -}}
+  {{- $out = $out | append (merge $w (dict "isCurrent" (eq $w.n $current))) -}}
+{{- end -}}
+
+{{- /* -------------------------------------------------- next up cards */ -}}
+
+{{- $card1 := false -}}
+{{- range $d := $tagged -}}
+  {{- if and (not $card1) (eq $d.iso $iso) $d.items -}}
+    {{- $card1 = dict "kicker" "Today"
+          "title" (index $d.items 0).plain
+          "meta" (printf "Week %d · %s %s" $d.wn $d.label $d.short) -}}
+  {{- end -}}
+{{- end -}}
+{{- if not $card1 -}}
+  {{- range $d := $tagged -}}
+    {{- if and (not $card1) (ge $d.iso $iso) $d.items -}}
+      {{- $card1 = dict "kicker" "Next class"
+            "title" (index $d.items 0).plain
+            "meta" (printf "Week %d · %s %s" $d.wn $d.label $d.short) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $card2 := false -}}
+{{- range $d := $tagged -}}
+  {{- if ge $d.iso $iso -}}
+    {{- range $i := $d.items -}}
+      {{- if and (not $card2) (eq $i.tag "due") -}}
+        {{- $card2 = dict "kicker" "Next due"
+              "title" $i.plain
+              "meta" (printf "%s %s" $d.label $d.short) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $card3 := false -}}
+{{- range $w := $out -}}
+  {{- if and (not $card3) (gt $w.n $current) (ne $w.notable "") -}}
+    {{- $card3 = dict "kicker" "Coming up"
+          "title" $w.notable
+          "meta" (printf "Week %d · %s" $w.n $w.dates) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $nextUp := slice -}}
+{{- range $c := (slice $card1 $card2 $card3) }}{{ if $c }}{{ $nextUp = $nextUp | append $c }}{{ end }}{{ end -}}
+
+{{- $counts := dict -}}
+{{- range $t := $tags -}}
+  {{- $counts = merge $counts (dict $t (default 0 ($sc.Get (printf "c_%s" $t)))) -}}
+{{- end -}}
+
+{{- return dict
+      "today" $iso
+      "current" $current
+      "total" ($sc.Get "total")
+      "counts" $counts
+      "intro" (delimit $intro "\n")
+      "weeks" $out
+      "nextUp" $nextUp -}}

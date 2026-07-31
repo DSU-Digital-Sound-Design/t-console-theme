@@ -1,0 +1,17 @@
+# Theme defaults. Anything set in your own site config wins over these.
+
+[params]
+  accent = "#b6ff5c"
+
+  # Set url = "" to skip the webfont request entirely, then either self-host in
+  # layouts/_partials/extra-head.html or fall back to the system monospace
+  # stack already in `family`.
+  [params.fonts]
+    url = "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+    family = "'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace"
+
+  # Which data file the resources page reads, without its extension.
+  resourcesData = "resources"
+
+# A course site has no use for tag or category archives.
+disableKinds = ["taxonomy", "term"]

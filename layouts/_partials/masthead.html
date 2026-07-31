@@ -1,0 +1,11 @@
+{{- $course := site.Params.course | default dict -}}
+<header class="masthead">
+  <a class="masthead__code" href="{{ "/" | relURL }}">{{ or $course.code site.Title }}</a>
+  {{ with $course.title }}<div class="masthead__title">{{ . }}</div>{{ end }}
+  <div class="masthead__spacer"></div>
+  <nav class="masthead__nav" aria-label="Course sections">
+    {{ range site.Menus.main }}
+      <a href="{{ .URL }}"{{ if or ($.IsMenuCurrent "main" .) ($.HasMenuCurrent "main" .) }} aria-current="page"{{ end }}>{{ .Name }}</a>
+    {{ end }}
+  </nav>
+</header>

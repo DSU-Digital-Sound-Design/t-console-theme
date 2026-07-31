@@ -1,0 +1,33 @@
+{{- /*
+  Resolves the schedule's tag vocabulary. Override the whole list in config:
+
+    [[params.schedule.tags]]
+      id    = "reading"     # what you type: [reading] Chapter 4
+      label = "Readings"    # the filter chip
+      color = "#c58cff"
+      skip  = false         # true = "nothing happens" (used by the No class tag)
+
+  Returns a slice of dicts: id label color skip
+*/ -}}
+
+{{- $tags := slice
+      (dict "id" "slides"  "label" "Slides"   "color" "#6ec1ff")
+      (dict "id" "project" "label" "Projects" "color" "#b6ff5c")
+      (dict "id" "due"     "label" "Due"      "color" "#ff7a5c")
+      (dict "id" "lab"     "label" "Labs"     "color" "#ffc85c")
+      (dict "id" "off"     "label" "No class" "color" "#7d8a7a" "skip" true) -}}
+
+{{- with site.Params.schedule.tags }}{{ $tags = . }}{{ end -}}
+
+{{- $out := slice -}}
+{{- range $t := $tags -}}
+  {{- with $t.id -}}
+    {{- $out = $out | append (dict
+          "id" .
+          "label" (default (title .) $t.label)
+          "color" (default "#7d8a7a" $t.color)
+          "skip" (default false $t.skip)) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- return $out -}}

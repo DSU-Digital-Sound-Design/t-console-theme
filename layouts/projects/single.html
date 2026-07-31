@@ -1,0 +1,71 @@
+{{ define "main" }}
+{{- /* `rubric: false` in front matter opts a project out of the site default,
+       for projects that carry their own rubric table in the body. */ -}}
+{{- $rubric := site.Params.rubric -}}
+{{- if isset .Params "rubric" }}{{ $rubric = .Params.rubric }}{{ end -}}
+<div class="wrap detail">
+
+  <nav class="detail__nav" aria-label="All projects">
+    <div class="label">all projects</div>
+    {{ range .CurrentSection.Pages.ByWeight }}
+    <a class="detail__navlink" href="{{ .RelPermalink }}"{{ if eq . $ }} aria-current="page"{{ end }}>
+      {{ partial "project-number.html" . }} — {{ .Title }}
+    </a>
+    {{ end }}
+  </nav>
+
+  <article>
+    <div class="detail__kicker">
+      project {{ partial "project-number.html" . }}{{ with .Params.week }} · week {{ . }}{{ end }}
+    </div>
+    <h1 class="detail__title">{{ .Title }}</h1>
+
+    <div class="detail__meta">
+      {{ with .Params.assigned }}<div>assigned <strong>{{ (time.AsTime .).Format "Jan 2" }}</strong></div>{{ end }}
+      {{ with .Params.due }}<div>due <strong class="is-due">{{ (time.AsTime .).Format "Jan 2" }}</strong></div>{{ end }}
+      {{ with .Params.tools }}
+      <div class="tools">{{ range . }}<span>{{ . }}</span>{{ end }}</div>
+      {{ end }}
+    </div>
+
+    <div class="detail__brief prose">{{ .Content }}</div>
+
+    {{ with .Params.steps }}
+    <section class="block">
+      <h2 class="label">what to do</h2>
+      {{ range . }}
+      <div class="step">
+        <span class="step__mark" aria-hidden="true">&rsaquo;</span>
+        <span class="step__text">{{ . }}</span>
+      </div>
+      {{ end }}
+    </section>
+    {{ end }}
+
+    {{ if or .Params.deliverables $rubric }}
+    <div class="split">
+      {{ with .Params.deliverables }}
+      <section>
+        <h2 class="label">submit</h2>
+        {{ range . }}<div class="deliverable">— {{ . }}</div>{{ end }}
+      </section>
+      {{ end }}
+      {{ with $rubric }}
+      <section>
+        <h2 class="label">graded on</h2>
+        {{ range . }}
+        <div class="rubric__row">
+          <div class="rubric__head">
+            <span class="rubric__k">{{ .key }}</span>
+            <span class="rubric__w">{{ .weight }}</span>
+          </div>
+          {{ with .detail }}<div class="rubric__d">{{ . }}</div>{{ end }}
+        </div>
+        {{ end }}
+      </section>
+      {{ end }}
+    </div>
+    {{ end }}
+  </article>
+</div>
+{{ end }}

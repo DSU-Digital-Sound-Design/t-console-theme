@@ -1,0 +1,93 @@
+baseURL = "https://example.org/"
+languageCode = "en-us"
+title = "DAD 222: Audio Production I"
+theme = "t-console-theme"
+enableRobotsTXT = true
+disableKinds = ["taxonomy", "term"]
+
+[params]
+  # The one knob that repaints the whole site.
+  accent = "#b6ff5c"
+  description = "A practical introduction to music technology, digital audio production, and creative sound design."
+
+  [params.course]
+    code = "DAD 222"
+    title = "Audio Production I"
+    term = "Fall 2025"
+    meeting = "MWF 10:00–10:50"
+    instructor = "Tate Carson"
+    final = "Friday, December 12 · 8:00–10:00 AM. Attendance is mandatory."
+
+  [params.schedule]
+    # Monday of week 1. Week numbers and date ranges derive from this.
+    start = "2025-08-25"
+
+    # Pin "today" while you preview a different point in the semester.
+    # Comment it out and the site uses the build date.
+    today = "2025-10-08"
+
+    filterPlaceholder = 'filter — try "reaper" or "due"'
+
+  # Shown on the front page under "details".
+  [[params.facts]]
+    key = "Meets"
+    value = "MWF 10:00–10:50"
+  [[params.facts]]
+    key = "Room"
+    value = "Beacom 112 + Control Room A"
+  [[params.facts]]
+    key = "Instructor"
+    value = "Tate Carson"
+  [[params.facts]]
+    key = "Credits"
+    value = "3"
+  [[params.facts]]
+    key = "Software"
+    value = "REAPER, Vital, Sitala"
+  [[params.facts]]
+    key = "Grading"
+    value = "Projects 60% · Labs 20% · Quizzes 20%"
+
+  # Default rubric, used by any project that doesn't set `rubric` itself.
+  # Most projects here carry their own rubric table and opt out with
+  # `rubric: false` in front matter.
+  [[params.rubric]]
+    key = "Technical execution"
+    weight = "40%"
+    detail = "Clean edits, no clipping, sensible gain staging, organised and renamed tracks."
+  [[params.rubric]]
+    key = "Creative decisions"
+    weight = "30%"
+    detail = "Arrangement, sound choices, and pacing show intent rather than accident."
+  [[params.rubric]]
+    key = "Completeness"
+    weight = "20%"
+    detail = "All required elements present; session file submitted alongside the bounce."
+  [[params.rubric]]
+    key = "Presentation"
+    weight = "10%"
+    detail = "Played in class, described briefly, questions answered."
+
+[[menus.main]]
+  name = "schedule"
+  pageRef = "/schedule"
+  weight = 10
+[[menus.main]]
+  name = "projects"
+  pageRef = "/projects"
+  weight = 20
+[[menus.main]]
+  name = "syllabus"
+  pageRef = "/syllabus"
+  weight = 30
+[[menus.main]]
+  name = "resources"
+  pageRef = "/resources"
+  weight = 40
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[markup.highlight]
+  noClasses = false
+  style = "github-dark"

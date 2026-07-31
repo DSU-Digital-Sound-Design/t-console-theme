@@ -1,0 +1,81 @@
+{{ define "main" }}
+{{- $c := partialCached "schedule-ctx.html" . -}}
+{{- $course := site.Params.course | default dict -}}
+{{- $tags := slice (dict "id" "all" "label" "All") | append (partialCached "schedule-tags.html" .) -}}
+<div class="wrap" data-schedule data-total="{{ $c.total }}">
+
+  <div class="sched__bar">
+    <h1 class="page-title">{{ .Title }}</h1>
+    <div class="spacer"></div>
+    <label class="visually-hidden" for="sched-q">Filter the schedule</label>
+    <input class="field" id="sched-q" type="search" autocomplete="off"
+           placeholder="{{ site.Params.schedule.filterPlaceholder | default "filter — try &#34;reaper&#34; or &#34;due&#34;" }}">
+  </div>
+
+  {{ with $c.intro }}
+  <div class="prose" style="margin:-8px 0 22px; max-width:66ch">{{ $.RenderString . }}</div>
+  {{ end }}
+
+  <div class="chips" role="group" aria-label="Filter by kind">
+    {{ range $tags }}
+    <button class="chip" type="button" data-tag="{{ .id }}" aria-pressed="{{ if eq .id "all" }}true{{ else }}false{{ end }}">
+      {{ .label }} <span>{{ if eq .id "all" }}{{ $c.total }}{{ else }}{{ index $c.counts .id }}{{ end }}</span>
+    </button>
+    {{ end }}
+  </div>
+
+  <div class="notice" id="sched-notice" hidden>
+    <span class="notice__text" id="sched-notice-text"></span>
+    <span class="notice__spacer"></span>
+    <button class="notice__btn" type="button" id="sched-clear">clear</button>
+  </div>
+
+  <p class="resultline" id="sched-result" aria-live="polite">
+    {{ $c.total }} items across {{ len $c.weeks }} weeks · click a week to expand
+  </p>
+
+  {{ range $c.weeks }}
+  <section class="week{{ if .isCurrent }} is-current{{ end }}"
+           id="week-{{ .nn }}"
+           data-week="{{ .n }}" data-start="{{ .start }}" data-end="{{ .end }}">
+    <button class="week__head" type="button" aria-expanded="true" aria-controls="week-body-{{ .nn }}">
+      <span class="week__n">WEEK {{ .nn }}</span>
+      <span class="week__summary">{{ .summary }}</span>
+      <span class="badge week__now">THIS WEEK</span>
+      <span class="week__caret" aria-hidden="true"></span>
+    </button>
+    <div class="week__body" id="week-body-{{ .nn }}">
+      {{ range .days }}
+      <div class="day{{ if .isToday }} is-today{{ end }}" data-iso="{{ .iso }}">
+        <div class="day__when">
+          {{ .label }} {{ .short }}
+          <div class="day__today">TODAY</div>
+        </div>
+        <div class="day__items">
+          {{ range .items }}
+          <div class="item"{{ with .tag }} data-tag="{{ . }}"{{ end }}>
+            <span class="item__tag"{{ with .tag }} data-tag="{{ . }}"{{ end }}>{{ .label }}</span>
+            <span class="item__body">
+              <span class="item__text">{{ .text }}</span>
+              {{ with .notes }}
+              <ul class="item__notes">
+                {{ range . }}<li>{{ . }}</li>{{ end }}
+              </ul>
+              {{ end }}
+            </span>
+          </div>
+          {{ end }}
+        </div>
+      </div>
+      {{ end }}
+    </div>
+  </section>
+  {{ end }}
+
+  <p class="empty" id="sched-empty" hidden>Nothing matches that filter.</p>
+
+  {{ with $course.final }}
+  <p class="sched__final">Final exam presentation — {{ . }}</p>
+  {{ end }}
+</div>
+{{ end }}

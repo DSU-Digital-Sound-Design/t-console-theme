@@ -1,0 +1,16 @@
+{{ define "main" }}
+<div class="wrap">
+  <h1 class="page-title">{{ .Title }}</h1>
+  {{ with .Content }}<div class="prose" style="margin-top:14px">{{ . }}</div>{{ end }}
+  <div class="projects">
+    {{ range .Pages }}
+    <a class="project-row" href="{{ .RelPermalink }}">
+      <span class="project-row__body">
+        <span class="project-row__title">{{ .Title }}</span>
+        <span class="project-row__summary">{{ .Summary }}</span>
+      </span>
+    </a>
+    {{ end }}
+  </div>
+</div>
+{{ end }}

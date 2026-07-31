@@ -1,0 +1,4 @@
+{{ with resources.Get "js/console.js" }}
+  {{ $js := . | js.Build (dict "minify" true "target" "es2017") | fingerprint }}
+  <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
+{{ end }}

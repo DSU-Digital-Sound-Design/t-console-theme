@@ -1,0 +1,177 @@
+groups:
+  - group: Course and studio
+    items:
+      - name: DSU Studio documentation
+        url: "https://sites.google.com/view/charmstudios/studio-documentation"
+        desc: "Signal flow, patchbay, and console notes."
+      - name: Music instrument frequency cheatsheet (PDF)
+        url: "https://dsu-digital-sound-design.github.io/f-25-DAD-222-Audio-Production-I/lectures/week-5/musicfrequencycheatsheet.pdf"
+        desc: "Where each instrument sits in the spectrum."
+
+  - group: Reaper
+    items:
+      - name: REAPER
+        url: "https://www.reaper.fm/"
+        desc: "Primary DAW for the course. Free 60-day evaluation."
+      - name: REAPER user guide (PDF)
+        url: "https://www.reaper.fm/userguide.php"
+        desc: "The official manual."
+      - name: ReaEffects guide (PDF)
+        url: "https://dlz.reaper.fm/userguide/REAPEREffectsGuide2021.pdf"
+        desc: "Every stock plugin, explained."
+      - name: REAPER Mania
+        url: "https://www.youtube.com/@REAPERMania"
+        desc: "Video tutorials for almost anything in Reaper."
+      - name: REAPER forums
+        url: "https://forum.cockos.com/forumdisplay.php?f=20"
+        desc: "Active community; search before you post."
+      - name: 10 best REAPER themes
+        url: "https://blog.landr.com/10-best-reaper-themes/"
+        desc: "If the default look is not for you."
+
+  - group: Other DAWs
+    items:
+      - name: Ableton Live
+        url: "https://www.ableton.com/"
+        desc: "Clip-based workflow, strong for electronic music."
+      - name: Logic Pro
+        url: "https://www.apple.com/logic-pro/"
+        desc: "macOS only; deep stock instrument library."
+      - name: Pro Tools
+        url: "https://www.avid.com/pro-tools"
+        desc: "Post-production and commercial studio standard."
+      - name: FL Studio
+        url: "https://www.image-line.com/"
+        desc: "Pattern-based sequencing, popular for beats."
+
+  - group: Synthesis and plugins
+    items:
+      - name: Vital
+        url: "https://vital.audio/#getvital"
+        desc: "Wavetable synthesizer used from Week 10 onward. Free tier."
+      - name: Vital user manual (PDF)
+        url: "https://hooklineismyhomie.weebly.com/uploads/1/4/9/6/149651803/vital_user_manual.pdf"
+        desc: "Reference for oscillators, modulation, and effects."
+
+  - group: Sound libraries and effects
+    items:
+      - name: Looperman
+        url: "https://www.looperman.com"
+        desc: "Royalty-free loops for the arranging project."
+      - name: Freesound
+        url: "https://freesound.org"
+        desc: "Creative Commons field recordings and effects."
+      - name: BBC Sound Effects
+        url: "https://sound-effects.bbcrewind.co.uk/"
+        desc: "Archive recordings, free for personal and educational use."
+      - name: 99Sounds
+        url: "https://99sounds.org/"
+        desc: "Curated free sample packs."
+      - name: Soundly
+        url: "https://getsoundly.com/"
+        desc: "Sound effects library and search tool."
+      - name: Open Air impulse responses
+        url: "https://www.openair.hosted.york.ac.uk/"
+        desc: "Real spaces you can load into a convolution reverb."
+      - name: Voxengo impulse responses
+        url: "https://www.voxengo.com/impulses/"
+        desc: "Free IR collection."
+
+  - group: Sampling
+    items:
+      - name: WhoSampled
+        url: "https://www.whosampled.com/"
+        desc: "Reference for the sampling unit; covers and sample lineage."
+      - name: Drum breaks, most used
+        url: "https://www.whosampled.com/song-tag/Drum%20Breaks%20%28Most%20Used%29/"
+        desc: "Starting point for the beatmaking project."
+
+  - group: Tutorials and learning
+    items:
+      - name: SoundGym School
+        url: "https://www.soundgym.co/site/school"
+        desc: "Free structured courses in recording, mixing, mastering, synthesis, and live sound."
+      - name: iZotope Learn
+        url: "https://www.izotope.com/en/learn"
+        desc: "Guides on mixing, mastering, and audio repair."
+      - name: SoundGym blog
+        url: "https://www.soundgym.co/blog"
+        desc: "Ongoing articles on ear training and creative process."
+
+  - group: Game audio and FMOD
+    items:
+      - name: FMOD Learning Portal
+        url: "https://www.fmod.com/learn"
+        desc: "Official tutorials and project-based guides for interactive audio."
+      - name: FMOD Studio adaptive audio tutorial
+        url: "https://m.youtube.com/watch?v=7A1HMOsD2eU"
+        desc: "Video walkthrough of adaptive audio for games."
+
+  - group: Field recording
+    items:
+      - name: Master field recording
+        url: "https://larslentzaudio.wordpress.com/2025/01/29/field-recording-creating-organizing-cataloging/"
+        desc: "Binaural and stereo technique, wind protection, file management, editing workflow."
+      - name: A beginner's guide to field recording
+        url: "https://www.factmag.com/2015/07/21/a-beginners-guide-to-field-recording/"
+        desc: "Creative and technical primer."
+
+  - group: YouTube channels
+    items:
+      - name: Pensado's Place
+        url: "https://www.youtube.com/user/PensadosPlace"
+        desc: "Interviews and deep dives with top engineers."
+      - name: Puremix
+        url: "https://www.youtube.com/channel/UCWy7CfnfvYH53xKzv32Stbg"
+        desc: "Mixing and mastering tutorials."
+      - name: Mix With The Masters
+        url: "https://www.youtube.com/user/MixWithTheMASTERS"
+        desc: "Studio walkthroughs and philosophy."
+      - name: Sylvia Massy
+        url: "https://www.youtube.com/channel/UCQV1RLrqmHDICg5HK4okuWA"
+        desc: "Creative recording techniques."
+      - name: Recording Revolution
+        url: "https://www.youtube.com/user/recordingrevolution"
+        desc: "Home studio production."
+      - name: Produce Like a Pro
+        url: "https://www.youtube.com/user/WarrenHuartRecording"
+        desc: "Production and engineering tips."
+      - name: Making Records with Eric Valentine
+        url: "https://www.youtube.com/channel/UChV4ZbmdvFZFDGN8XRzpIrQ"
+        desc: "Studio workflow and philosophy."
+
+  - group: Books, magazines, podcasts
+    items:
+      - name: Recommended reading list
+        url: "https://www.reddit.com/r/mixingmastering/comments/17pbkv0/your_favorite_learning_resources/"
+        desc: "Owsinski, Senior, Izhaki, and Katz are the usual starting points; full list and links here."
+      - name: Sound On Sound
+        url: "http://www.soundonsound.com/"
+        desc: "Technique articles and gear reviews."
+      - name: Mix Magazine
+        url: "http://www.mixonline.com/"
+        desc: "Industry news and studio features."
+      - name: Tape Op
+        url: "https://tapeop.com/"
+        desc: "Interviews with working engineers. Free subscription."
+      - name: Song Exploder
+        url: "http://songexploder.net"
+        desc: "Artists take apart one of their own tracks."
+      - name: Working Class Audio
+        url: "https://www.workingclassaudio.com/"
+        desc: "The business and craft of audio work."
+      - name: The Mastering Show
+        url: "http://themasteringshow.com"
+        desc: "Mastering technique and loudness discussion."
+
+  - group: Community
+    items:
+      - name: DSU Live
+        url: "https://www.facebook.com/DSU.Live/"
+        desc: "Student-run live sound and record label club."
+      - name: Sound Design Discord
+        url: "https://discord.gg/w85WUcpQ"
+        desc: "Peer help, project sharing, program news."
+      - name: Student Research Initiatives
+        url: "https://dsu.edu/research/forms.html"
+        desc: "Funding for undergraduate sound projects."

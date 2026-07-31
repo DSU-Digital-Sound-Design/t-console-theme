@@ -1,0 +1,7 @@
+{{- $course := site.Params.course | default dict -}}
+<footer class="colophon">
+  <span>{{ or $course.code site.Title }}{{ with $course.term }} · {{ . }}{{ end }}</span>
+  {{ with $course.instructor }}<span>{{ . }}</span>{{ end }}
+  <span class="masthead__spacer"></span>
+  <span>Press <kbd>/</kbd> to search</span>
+</footer>

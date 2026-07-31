@@ -1,0 +1,54 @@
+{{ define "main" }}
+{{- $c := partialCached "schedule-ctx.html" . -}}
+{{- $course := site.Params.course | default dict -}}
+<div class="wrap wrap--home">
+
+  <div class="kicker">
+    {{- with $course.term }}{{ . }}{{ end -}}
+    {{- if and $course.term $course.meeting }} — {{ end -}}
+    {{- with $course.meeting }}{{ . }}{{ end -}}
+  </div>
+
+  <h1 class="hero__code">{{ or $course.code site.Title }}</h1>
+  {{ with $course.title }}<h2 class="hero__title">{{ . }}</h2>{{ end }}
+
+  {{ with $c.nextUp }}
+  <section class="nextup" aria-label="Next up">
+    <div class="nextup__head">next up</div>
+    <div class="nextup__grid">
+      {{ range . }}
+      <div class="nextup__card">
+        <div class="nextup__kicker">{{ .kicker }}</div>
+        <div class="nextup__title">{{ .title }}</div>
+        <div class="nextup__meta">{{ .meta }}</div>
+      </div>
+      {{ end }}
+    </div>
+  </section>
+  {{ end }}
+
+  <div class="split">
+    <section>
+      <h2 class="label">about</h2>
+      <div class="prose">
+        {{ with .Content }}{{ . }}{{ else }}<p>{{ site.Params.description }}</p>{{ end }}
+      </div>
+    </section>
+    {{ with site.Params.facts }}
+    <section>
+      <h2 class="label">details</h2>
+      <div class="facts">
+        {{ range . }}
+        <div class="facts__row">
+          <div class="facts__key">{{ .key }}</div>
+          <div class="facts__val">{{ .value }}</div>
+        </div>
+        {{ end }}
+      </div>
+    </section>
+    {{ end }}
+  </div>
+
+  <p class="hint">Type <kbd>/</kbd> anywhere to jump to a week, project, or lecture.</p>
+</div>
+{{ end }}

@@ -1,0 +1,47 @@
+{{- $course := site.Params.course | default dict -}}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{{- /* Home reads "DAD 222 — Audio Production I" when both are configured,
+       and falls back to the site title when they are not. */ -}}
+{{- $home := site.Title -}}
+{{- if and $course.code $course.title }}{{ $home = printf "%s — %s" $course.code $course.title }}{{ end -}}
+<title>{{ if .IsHome }}{{ $home }}{{ else }}{{ .Title }} · {{ or $course.code site.Title }}{{ end }}</title>
+<meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ with .Summary }}{{ . | plainify | truncate 160 }}{{ else }}{{ site.Params.description }}{{ end }}{{ end }}">
+{{ with .OutputFormats.Get "rss" }}<link rel="alternate" type="application/rss+xml" href="{{ .Permalink }}" title="{{ site.Title }}">{{ end }}
+<link rel="canonical" href="{{ .Permalink }}">
+
+{{- /* params.fonts.url = "" skips the request entirely, for self-hosted or
+       offline builds — pair it with params.fonts.family. */ -}}
+{{- $fonts := site.Params.fonts | default dict -}}
+{{- with $fonts.url }}
+  {{- if strings.Contains . "fonts.googleapis.com" }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  {{- end }}
+<link rel="stylesheet" href="{{ . }}">
+{{- end }}
+
+{{ with resources.Get "css/console.css" }}
+  {{ $css := . | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+{{ end }}
+
+{{- /* Theme variables that come from config. Built as a string so the values
+       land in the stylesheet verbatim. */ -}}
+{{- $vars := slice -}}
+{{- with site.Params.accent }}{{ $vars = $vars | append (printf "--a:%s;" .) }}{{ end -}}
+{{- with $fonts.family }}{{ $vars = $vars | append (printf "--mono:%s;" .) }}{{ end -}}
+{{- $rules := slice -}}
+{{- with $vars }}{{ $rules = $rules | append (printf ":root{%s}" (delimit . "")) }}{{ end -}}
+{{- range partialCached "schedule-tags.html" . -}}
+  {{- $rules = $rules | append (printf "[data-tag=%q]{--tag:%s}" .id .color) -}}
+{{- end -}}
+{{- with $rules }}
+<style>{{ delimit . "" | safeCSS }}</style>
+{{- end }}
+
+<meta name="theme-color" content="#0b0c0b">
+<meta property="og:title" content="{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }}{{ end }}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ .Permalink }}">
+{{ partial "extra-head.html" . }}

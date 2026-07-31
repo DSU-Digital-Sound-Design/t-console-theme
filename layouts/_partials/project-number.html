@@ -1,0 +1,4 @@
+{{- /* A project's display number: front-matter `number`, else its weight,
+       else its position in the section. */ -}}
+{{- with .Params.number }}{{ . }}
+{{- else }}{{ printf "%02d" (int (or .Weight 0)) }}{{ end -}}

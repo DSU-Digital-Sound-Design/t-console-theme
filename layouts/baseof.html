@@ -1,0 +1,19 @@
+{{- $ctx := partialCached "schedule-ctx.html" . -}}
+<!DOCTYPE html>
+<html lang="{{ or site.Language.LanguageCode site.Language.Lang "en" }}"
+      data-build-date="{{ $ctx.today }}"
+      {{- with site.Params.schedule.today }} data-date-pinned{{ end }}>
+<head>
+  {{ partial "head.html" . }}
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  {{ partial "masthead.html" . }}
+  <main id="main">
+    {{ block "main" . }}{{ end }}
+  </main>
+  {{ partial "colophon.html" . }}
+  {{ partial "palette.html" . }}
+  {{ partial "scripts.html" . }}
+</body>
+</html>

@@ -1,0 +1,22 @@
+{{ define "main" }}
+<div class="wrap">
+  <h1 class="page-title">{{ .Title }}</h1>
+  {{ with .Content }}<div class="prose" style="margin-top:14px">{{ . }}</div>{{ end }}
+
+  <div class="projects">
+    {{ range .Pages.ByWeight }}
+    <a class="project-row" href="{{ .RelPermalink }}">
+      <span class="project-row__n">{{ partial "project-number.html" . }}</span>
+      <span class="project-row__body">
+        <span class="project-row__title">{{ .Title }}</span>
+        <span class="project-row__summary">{{ with .Params.summary }}{{ . }}{{ else }}{{ .Summary }}{{ end }}</span>
+      </span>
+      <span class="project-row__dates">
+        {{ with .Params.assigned }}<span>assigned {{ (time.AsTime .).Format "Jan 2" }}</span>{{ end }}
+        {{ with .Params.due }}<span class="project-row__due">due {{ (time.AsTime .).Format "Jan 2" }}</span>{{ end }}
+      </span>
+    </a>
+    {{ end }}
+  </div>
+</div>
+{{ end }}
