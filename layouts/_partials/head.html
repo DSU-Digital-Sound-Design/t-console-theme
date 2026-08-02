@@ -31,9 +31,25 @@
 {{- $vars := slice -}}
 {{- with site.Params.accent }}{{ $vars = $vars | append (printf "--a:%s;" .) }}{{ end -}}
 {{- with $fonts.family }}{{ $vars = $vars | append (printf "--mono:%s;" .) }}{{ end -}}
+{{- $tags := partialCached "schedule-tags.html" . -}}
+
+{{- /* Width of the schedule's tag column, sized to the longest tag id.
+
+       The chip shows the id, uppercased, and every chip shares one width so
+       the item text lines up down the page. That width cannot be a constant:
+       the vocabulary is replaceable, and an id longer than the default set's
+       "project" overflows its box. "screening" and "assignment" each did.
+
+       ch and em resolve against the element that uses the property, not
+       against :root, so this stays correct at .item__tag's own font size.
+       12px covers the 5px horizontal padding and 1px border on each side. */ -}}
+{{- $w := 0 -}}
+{{- range $tags }}{{ if gt (len .id) $w }}{{ $w = len .id }}{{ end }}{{ end -}}
+{{- if $w }}{{ $vars = $vars | append (printf "--tag-col:calc(%dch + %.1fem + 12px);" $w (mul (float $w) 0.1)) }}{{ end -}}
+
 {{- $rules := slice -}}
 {{- with $vars }}{{ $rules = $rules | append (printf ":root{%s}" (delimit . "")) }}{{ end -}}
-{{- range partialCached "schedule-tags.html" . -}}
+{{- range $tags -}}
   {{- $rules = $rules | append (printf "[data-tag=%q]{--tag:%s}" .id .color) -}}
 {{- end -}}
 {{- with $rules }}

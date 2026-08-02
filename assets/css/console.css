@@ -523,7 +523,9 @@ h1, h2, h3, p, ul, ol, figure { margin: 0; }
   letter-spacing: 0.1em;
   text-transform: uppercase;
   flex: none;
-  width: 62px;
+  /* Sized in <head> to the longest configured tag id; see _partials/head.html.
+     The fallback fits the default vocabulary, whose longest id is "project". */
+  width: var(--tag-col, 62px);
   text-align: center;
   color: var(--fg-faint);
 }
