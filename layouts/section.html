@@ -7,7 +7,7 @@
     <a class="project-row" href="{{ .RelPermalink }}">
       <span class="project-row__body">
         <span class="project-row__title">{{ .Title }}</span>
-        <span class="project-row__summary">{{ .Summary }}</span>
+        <span class="project-row__summary">{{ partial "row-summary.html" . | truncate 180 }}</span>
       </span>
     </a>
     {{ end }}

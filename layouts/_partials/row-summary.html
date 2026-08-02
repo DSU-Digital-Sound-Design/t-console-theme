@@ -1,0 +1,27 @@
+{{- /*
+  One line of plain text describing a page, for list rows and meta tags.
+
+  Front-matter `summary` wins. Failing that, Hugo's auto-summary is raw
+  rendered HTML, which is fine for prose but wrong for a reveal-hugo deck: it
+  is slide markup — headings, rules, page-relative <img> srcs that resolve only
+  on the deck's own page (so they 404 on an index), and the contents of
+  <aside class="notes">, which are speaker notes and have no business on a
+  public page.
+
+  Drop the notes, flatten the rest to text. Callers truncate.
+
+  Two passes, because the auto-summary is a truncated prefix of the page and
+  can end mid-<aside>: the first removes complete note blocks, the second
+  removes a block left hanging open by the truncation. Without the second,
+  speaker notes still reach the page whenever the cut lands inside one.
+
+  Usage:  {{ partial "row-summary.html" . | truncate 180 }}
+*/ -}}
+{{- $s := .Summary -}}
+{{- with .Params.summary }}{{ $s = . }}{{ end -}}
+{{- return ($s
+      | replaceRE `(?s)<aside[^>]*>.*?</aside>` ""
+      | replaceRE `(?s)<aside[^>]*>.*` ""
+      | plainify
+      | htmlUnescape
+      | chomp) -}}

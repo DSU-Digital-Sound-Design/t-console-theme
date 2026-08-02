@@ -6,7 +6,7 @@
 {{- $home := site.Title -}}
 {{- if and $course.code $course.title }}{{ $home = printf "%s — %s" $course.code $course.title }}{{ end -}}
 <title>{{ if .IsHome }}{{ $home }}{{ else }}{{ .Title }} · {{ or $course.code site.Title }}{{ end }}</title>
-<meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ with .Summary }}{{ . | plainify | truncate 160 }}{{ else }}{{ site.Params.description }}{{ end }}{{ end }}">
+<meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ with partial "row-summary.html" . }}{{ . | truncate 160 }}{{ else }}{{ site.Params.description }}{{ end }}{{ end }}">
 {{ with .OutputFormats.Get "rss" }}<link rel="alternate" type="application/rss+xml" href="{{ .Permalink }}" title="{{ site.Title }}">{{ end }}
 <link rel="canonical" href="{{ .Permalink }}">
 
