@@ -1,0 +1,12 @@
+{{- /* Labeled panel for in-class exercises. Inner content is markdown.
+  {{< drill label="In-class drill: prove it to yourself" >}}
+  Record the same spoken line three times:
+
+  1. Gain cranked so it clips
+  ...
+  {{< /drill >}}
+*/ -}}
+<div class="drill">
+  {{- with .Get "label" }}<p class="drill__label">{{ . }}</p>{{ end }}
+  {{ .Inner | markdownify }}
+</div>

@@ -1,0 +1,10 @@
+{{- /* One stat card. All params optional; note supports inline markdown.
+  value: big mono accent figure
+  label: small uppercase caption
+  note:  body-sized explanation
+*/ -}}
+<div class="stat">
+  {{- with .Get "value" }}<span class="stat__value">{{ . }}</span>{{ end -}}
+  {{- with .Get "label" }}<span class="stat__label">{{ . }}</span>{{ end -}}
+  {{- with .Get "note" }}<span class="stat__note">{{ . | markdownify }}</span>{{ end -}}
+</div>

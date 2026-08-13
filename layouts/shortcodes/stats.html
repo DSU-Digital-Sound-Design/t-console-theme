@@ -1,0 +1,7 @@
+{{- /* Row wrapper for stat cards. Usage:
+  {{< stats >}}
+    {{< stat value="-12 to -6 dB" label="Peaks" />}}
+    {{< stat label="Track fader" note="Only changes what you hear on **playback**." />}}
+  {{< /stats >}}
+*/ -}}
+<div class="stat-row">{{ .Inner }}</div>
