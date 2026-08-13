@@ -921,6 +921,60 @@ h1, h2, h3, p, ul, ol, figure { margin: 0; }
   .field { width: 100%; }
 }
 
+/* ---- Lesson-page components ------------------------------------------ */
+
+.stat-row {
+  display: flex;
+  gap: 12px;
+  margin: 18px 0;
+  flex-wrap: wrap;
+}
+.stat {
+  flex: 1 1 150px;
+  background: var(--panel);
+  border: 1px solid var(--rule-panel);
+  padding: 14px 16px;
+}
+.stat__value {
+  display: block;
+  font-family: var(--mono);
+  font-size: 19px;
+  color: var(--a);
+  margin-bottom: 4px;
+}
+.stat__label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-label);
+}
+.stat__note {
+  display: block;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--fg-desc);
+  margin-top: 6px;
+}
+.stat__note strong { color: var(--fg-bright); font-weight: 500; }
+
+.drill {
+  border: 1px solid var(--rule-panel);
+  border-left: 2px solid var(--a);
+  background: var(--panel);
+  padding: 16px 18px;
+  margin: 22px 0;
+}
+.drill__label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--a);
+  margin: 0 0 10px;
+}
+.drill > :last-child { margin-bottom: 0; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
