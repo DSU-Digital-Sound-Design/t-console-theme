@@ -1,0 +1,425 @@
+/* ==========================================================================
+   Console deck theme — reveal-hugo custom_theme
+   Descends from the t-console-theme course pages: same near-black ground,
+   same hairline rules, same per-site accent (--a, injected in
+   layouts/partials/reveal-hugo/head.html from site.Params.accent).
+   ========================================================================== */
+
+:root {
+  --a: #b6ff5c; /* fallback; overridden per site from hugo.toml accent */
+  --bg: #0b0c0b;
+  --panel: #101210;
+  --rule: #1e211d;
+  --rule-panel: #232720;
+  --rule-link: #2c332a;
+  --fg: #d8e0d6;
+  --fg-bright: #e4ebe1;
+  --fg-body: #b7c2b3;
+  --fg-mute: #6d786a;
+  --fg-label: #5d6a5a;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo,
+    Consolas, "Liberation Mono", monospace;
+  --sans: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Helvetica, Arial, sans-serif;
+
+  --r-background-color: var(--bg);
+  --r-main-font: var(--sans);
+  --r-main-font-size: 38px;
+  --r-main-color: var(--fg-body);
+  --r-heading-font: var(--mono);
+  --r-heading-color: var(--fg-bright);
+  --r-link-color: var(--a);
+  --r-link-color-hover: var(--fg-bright);
+  --r-selection-background-color: var(--a);
+  --r-selection-color: var(--bg);
+}
+
+.reveal-viewport {
+  background: var(--bg);
+}
+
+.reveal {
+  font-family: var(--r-main-font);
+  font-size: var(--r-main-font-size);
+  font-weight: 400;
+  color: var(--r-main-color);
+}
+
+.reveal ::selection {
+  color: var(--r-selection-color);
+  background: var(--r-selection-background-color);
+  text-shadow: none;
+}
+
+.reveal .slides section {
+  text-align: left;
+  line-height: 1.45;
+}
+
+/* --------------------------------------------------------------------------
+   Headings — mono, like the course site's terminal chrome.
+   h2 is the workhorse slide title: small accent tick + hairline underneath.
+   -------------------------------------------------------------------------- */
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4 {
+  font-family: var(--r-heading-font);
+  color: var(--r-heading-color);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 0 0 0.7em;
+  text-transform: none;
+  word-wrap: break-word;
+}
+
+.reveal h1 {
+  font-size: 1.9em;
+  text-align: center;
+  margin-top: 0.5em;
+}
+
+/* Title slides: center the lone h1 and give it the site's accent rule. */
+.reveal h1::after {
+  content: "";
+  display: block;
+  width: 2.2em;
+  height: 4px;
+  margin: 0.35em auto 0;
+  background: var(--a);
+}
+
+.reveal h2 {
+  font-size: 1.35em;
+  padding-bottom: 0.35em;
+  border-bottom: 1px solid var(--rule);
+}
+
+.reveal h2::before {
+  content: "## ";
+  color: var(--a);
+  font-weight: 600;
+}
+
+.reveal h3 {
+  font-size: 1.1em;
+}
+
+.reveal h3::before {
+  content: "### ";
+  color: var(--fg-label);
+}
+
+.reveal h4 {
+  font-size: 0.95em;
+  color: var(--fg);
+}
+
+/* --------------------------------------------------------------------------
+   Body copy
+   -------------------------------------------------------------------------- */
+
+.reveal p {
+  margin: 0.6em 0;
+}
+
+.reveal strong,
+.reveal b {
+  color: var(--fg-bright);
+  font-weight: 600;
+}
+
+.reveal em {
+  color: var(--fg);
+}
+
+.reveal ul,
+.reveal ol {
+  display: block;
+  margin: 0.4em 0 0.4em 1.1em;
+}
+
+.reveal ul li,
+.reveal ol li {
+  margin: 0.35em 0;
+  padding-left: 0.15em;
+}
+
+.reveal ul li::marker {
+  content: "– ";
+  color: var(--a);
+}
+
+.reveal ol li::marker {
+  color: var(--a);
+  font-family: var(--mono);
+}
+
+.reveal ul ul li::marker {
+  content: "· ";
+  color: var(--fg-mute);
+}
+
+.reveal ul ul,
+.reveal ol ol,
+.reveal ul ol,
+.reveal ol ul {
+  font-size: 0.9em;
+}
+
+/* --------------------------------------------------------------------------
+   Links
+   -------------------------------------------------------------------------- */
+
+.reveal a {
+  color: var(--r-link-color);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule-link);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.reveal a:hover {
+  color: var(--r-link-color-hover);
+  border-bottom-color: var(--a);
+  text-shadow: none;
+}
+
+/* --------------------------------------------------------------------------
+   Panels: blockquotes, code, tables — hairline-bordered like site cards
+   -------------------------------------------------------------------------- */
+
+.reveal blockquote {
+  display: block;
+  width: 92%;
+  margin: 0.7em auto;
+  padding: 0.5em 0.9em;
+  background: var(--panel);
+  border: 1px solid var(--rule-panel);
+  border-left: 3px solid var(--a);
+  font-style: normal;
+  color: var(--fg);
+  box-shadow: none;
+}
+
+.reveal blockquote p {
+  margin: 0.3em 0;
+}
+
+.reveal code {
+  font-family: var(--mono);
+  font-size: 0.9em;
+  color: var(--fg-bright);
+  background: var(--panel);
+  border: 1px solid var(--rule-panel);
+  border-radius: 3px;
+  padding: 0.05em 0.3em;
+}
+
+.reveal pre {
+  display: block;
+  width: 94%;
+  margin: 0.7em auto;
+  font-family: var(--mono);
+  font-size: 0.55em;
+  line-height: 1.4;
+  box-shadow: none;
+}
+
+.reveal pre code {
+  display: block;
+  max-height: 450px;
+  padding: 0.8em 1em;
+  border: 1px solid var(--rule-panel);
+  border-radius: 4px;
+  background: var(--panel);
+}
+
+.reveal table {
+  margin: 0.7em auto;
+  border-collapse: collapse;
+  font-size: 0.75em;
+}
+
+.reveal table th {
+  font-family: var(--mono);
+  font-weight: 600;
+  color: var(--fg-label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.8em;
+  border-bottom: 1px solid var(--rule-panel);
+  padding: 0.35em 0.7em;
+  text-align: left;
+}
+
+.reveal table td {
+  border-bottom: 1px solid var(--rule);
+  padding: 0.35em 0.7em;
+}
+
+.reveal table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* --------------------------------------------------------------------------
+   Media
+   -------------------------------------------------------------------------- */
+
+.reveal section img {
+  max-width: 100%;
+  max-height: 60vh;
+  margin: 0.5em auto;
+  display: block;
+  background: transparent;
+  border: 1px solid var(--rule-panel);
+  border-radius: 4px;
+  box-shadow: none;
+}
+
+.reveal section iframe {
+  display: block;
+  margin: 0.6em auto;
+  max-width: 100%;
+  border: 1px solid var(--rule-panel);
+  border-radius: 4px;
+}
+
+/* Slides that stack several images: shrink them so they share the frame
+   instead of running off the bottom. */
+.reveal section:has(img ~ img) img {
+  max-height: 34vh;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0.3em 0.4em;
+}
+
+.reveal section:has(img ~ img) p {
+  text-align: center;
+}
+
+.reveal section video {
+  max-width: 100%;
+  max-height: 60vh;
+  margin: 0.5em auto;
+  display: block;
+}
+
+/* Slides with background images: let text sit on a readable scrim. */
+.reveal .slide-background-content {
+  background-color: transparent;
+}
+
+/* --------------------------------------------------------------------------
+   Chrome: controls, progress, slide numbers
+   -------------------------------------------------------------------------- */
+
+.reveal .controls {
+  color: var(--a);
+}
+
+.reveal .progress {
+  height: 3px;
+  background: var(--rule);
+  color: var(--a);
+}
+
+.reveal .slide-number {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--fg-mute);
+  background: transparent;
+}
+
+/* --------------------------------------------------------------------------
+   Fragments
+   -------------------------------------------------------------------------- */
+
+.reveal .slides section .fragment {
+  transition: all 0.2s ease;
+}
+
+.reveal .slides section .fragment.highlight-current-blue.current-fragment {
+  color: var(--a);
+}
+
+/* --------------------------------------------------------------------------
+   Full-bleed background slides ({{< slide background-image="..." >}})
+   Text sits on the dimmed photo: bigger, brighter, shadowed, no hairlines.
+   -------------------------------------------------------------------------- */
+
+.reveal .slides section[data-background-image] h1,
+.reveal .slides section[data-background-image] h2,
+.reveal .slides section[data-background-image] h3,
+.reveal .slides section[data-background-image] p,
+.reveal .slides section[data-background-image] li {
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.85), 0 0 2px rgba(0, 0, 0, 0.9);
+}
+
+.reveal .slides section[data-background-image] h1,
+.reveal .slides section[data-background-image] h2 {
+  color: #fff;
+  border-bottom: none;
+}
+
+.reveal .slides section[data-background-image] h2 {
+  font-size: 1.6em;
+}
+
+/* --------------------------------------------------------------------------
+   Pull-quote slides — {{< slide class="quote" >}}
+   A blockquote carries the quote; the paragraph after it is the attribution.
+
+     {{< slide class="quote" >}}
+
+     > Rain is sizzling bacon.
+
+     — Skip Lievsay
+
+   Inline blockquotes on ordinary slides keep the panel treatment above.
+   -------------------------------------------------------------------------- */
+
+.reveal section.quote blockquote {
+  width: auto;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: var(--fg-bright);
+  font-size: 1.5em;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+/* Oversized opening quote in the accent, mono like the heading glyphs */
+.reveal section.quote blockquote::before {
+  content: "\201C";
+  display: block;
+  font-family: var(--mono);
+  font-size: 1.7em;
+  line-height: 0.6;
+  margin-bottom: 0.25em;
+  color: var(--a);
+}
+
+.reveal section.quote blockquote p {
+  margin: 0;
+}
+
+/* Attribution: the paragraph following the quote */
+.reveal section.quote blockquote + p {
+  margin-top: 1.1em;
+  font-family: var(--mono);
+  font-size: 0.55em;
+  color: var(--fg-mute);
+}
+
+/* Hairline rule between quote and attribution, echoing the heading rules */
+.reveal section.quote blockquote + p::before {
+  content: "";
+  display: block;
+  width: 2.2em;
+  border-top: 1px solid var(--a);
+  margin-bottom: 0.9em;
+}
