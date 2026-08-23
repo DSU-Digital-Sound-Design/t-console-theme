@@ -234,6 +234,24 @@ groups:
 Any page without a `layout` renders as prose in a narrow column, with `##`
 headings styled as accent section labels. That is all the syllabus needs.
 
+### Reveal deck shortcodes
+
+Use `slide-split` to pair an image with Markdown without hand-writing a fragile
+two-column layout:
+
+```md
+{{< slide-split
+  src="/images/how-we-hear.jpg"
+  alt="Diagram showing how sound travels through the ear"
+>}}
+- The first point can use **Markdown**.
+- The second point stays beside the image.
+{{< /slide-split >}}
+```
+
+Set `image-side="right"` to reverse the columns. Both `src` and `alt` are
+required.
+
 ## How "today" works
 
 Hugo stamps the build date into the page and marks the current week, the current

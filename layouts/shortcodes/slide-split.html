@@ -1,0 +1,26 @@
+{{- /* Two-column media and Markdown layout for Reveal decks.
+
+  {{< slide-split
+    src="/images/example.jpg"
+    alt="Description of the image"
+    image-side="left"
+  >}}
+  - Markdown content
+  {{< /slide-split >}}
+
+  image-side is optional and accepts "left" or "right".
+*/ -}}
+{{- $src := .Get "src" -}}
+{{- $alt := .Get "alt" -}}
+{{- $side := .Get "image-side" | default "left" -}}
+{{- if not $src }}{{ errorf "slide-split shortcode requires a src: %s" .Position }}{{ end -}}
+{{- if not $alt }}{{ errorf "slide-split shortcode requires alt text: %s" .Position }}{{ end -}}
+{{- if not (in (slice "left" "right") $side) }}{{ errorf "slide-split image-side must be left or right: %s" .Position }}{{ end -}}
+<div class="slide-split slide-split--image-{{ $side }}">
+  <figure class="slide-split__media">
+    <img src="{{ $src }}" alt="{{ $alt }}">
+  </figure>
+  <div class="slide-split__copy">
+    {{- .Page.RenderString .Inner -}}
+  </div>
+</div>
