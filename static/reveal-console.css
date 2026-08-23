@@ -381,6 +381,19 @@
   color: var(--a);
 }
 
+/* Text-heavy slides: {{< slide class="compact" >}} */
+.reveal section.compact > p,
+.reveal section.compact > ul,
+.reveal section.compact > ol {
+  font-size: 0.82em;
+  line-height: 1.35;
+}
+
+.reveal section.compact > ul li,
+.reveal section.compact > ol li {
+  margin: 0.25em 0;
+}
+
 /* --------------------------------------------------------------------------
    Full-bleed background slides ({{< slide background-image="..." >}})
    Text sits on the dimmed photo: bigger, brighter, shadowed, no hairlines.

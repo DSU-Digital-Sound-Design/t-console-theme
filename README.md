@@ -252,6 +252,20 @@ two-column layout:
 Set `image-side="right"` to reverse the columns. Both `src` and `alt` are
 required.
 
+For a text-heavy slide, add the `compact` class below its separator. It reduces
+the body type and list spacing while leaving the title unchanged:
+
+```md
+---
+
+{{< slide class="compact" >}}
+
+## A text-heavy slide
+
+- First point
+- Second point
+```
+
 ## How "today" works
 
 Hugo stamps the build date into the page and marks the current week, the current
