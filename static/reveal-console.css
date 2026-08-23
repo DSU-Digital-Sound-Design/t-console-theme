@@ -331,6 +331,15 @@
   font-size: 0.78em;
 }
 
+.reveal .slide-split--compact .slide-split__copy {
+  font-size: 0.68em;
+  line-height: 1.35;
+}
+
+.reveal .slide-split--compact .slide-split__copy li {
+  margin: 0.25em 0;
+}
+
 .reveal .slide-split__copy > :first-child {
   margin-top: 0;
 }

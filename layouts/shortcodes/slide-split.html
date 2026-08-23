@@ -4,19 +4,21 @@
     src="/images/example.jpg"
     alt="Description of the image"
     image-side="left"
+    compact="true"
   >}}
   - Markdown content
   {{< /slide-split >}}
 
-  image-side is optional and accepts "left" or "right".
+  image-side accepts "left" or "right". compact is optional.
 */ -}}
 {{- $src := .Get "src" -}}
 {{- $alt := .Get "alt" -}}
 {{- $side := .Get "image-side" | default "left" -}}
+{{- $compact := eq (.Get "compact") "true" -}}
 {{- if not $src }}{{ errorf "slide-split shortcode requires a src: %s" .Position }}{{ end -}}
 {{- if not $alt }}{{ errorf "slide-split shortcode requires alt text: %s" .Position }}{{ end -}}
 {{- if not (in (slice "left" "right") $side) }}{{ errorf "slide-split image-side must be left or right: %s" .Position }}{{ end -}}
-<div class="slide-split slide-split--image-{{ $side }}">
+<div class="slide-split slide-split--image-{{ $side }}{{ if $compact }} slide-split--compact{{ end }}">
   <figure class="slide-split__media">
     <img src="{{ $src }}" alt="{{ $alt }}">
   </figure>

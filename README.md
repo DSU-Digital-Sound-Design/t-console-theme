@@ -250,7 +250,8 @@ two-column layout:
 ```
 
 Set `image-side="right"` to reverse the columns. Both `src` and `alt` are
-required.
+required. Add `compact="true"` when the copy column contains a title or several
+long points.
 
 For a text-heavy slide, add the `compact` class below its separator. It reduces
 the body type and list spacing while leaving the title unchanged:
