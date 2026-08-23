@@ -381,6 +381,11 @@
      >
      > &mdash; Skip Lievsay, *sound designer*
 
+   Long quotations get the same treatment a step down in size, so a passage
+   of book-length prose still fits the slide:
+
+     {{< slide class="quote long" >}}
+
    Inline blockquotes on ordinary slides keep the panel treatment above.
    -------------------------------------------------------------------------- */
 
@@ -419,6 +424,19 @@
   letter-spacing: -0.02em;
   color: var(--fg-bright);
   text-wrap: balance;
+}
+
+/* Long passages: same pull-quote frame, prose-scale type so it still fits.
+   text-wrap:balance is dropped here — it fights long multi-line paragraphs. */
+.reveal section.quote.long blockquote p {
+  font-size: 0.95em;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  text-wrap: initial;
+}
+
+.reveal section.quote.long blockquote p + p {
+  margin-top: 1.1em;
 }
 
 /* Attribution: second paragraph inside the quote, or the one after it */
