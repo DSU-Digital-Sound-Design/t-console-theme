@@ -1,0 +1,9 @@
+{{- /* One titled column inside slide-columns. */ -}}
+{{- $title := .Get "title" -}}
+{{- if not $title }}{{ errorf "slide-column shortcode requires a title: %s" .Position }}{{ end -}}
+<div class="slide-column" role="group" aria-label="{{ $title }}">
+  <h3>{{ $title }}</h3>
+  <div class="slide-column__body">
+    {{- .Page.RenderString .Inner -}}
+  </div>
+</div>

@@ -352,6 +352,38 @@
   order: 2;
 }
 
+/* Paired concepts: {{< slide-columns >}} with two slide-column children. */
+.reveal .slide-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5em;
+  align-items: start;
+  margin-top: 0.5em;
+}
+
+.reveal .slide-column {
+  min-width: 0;
+  padding: 0.8em 0.1em 0;
+  border-top: 3px solid var(--a);
+}
+
+.reveal .slide-column h3 {
+  margin: 0 0 0.7em;
+}
+
+.reveal .slide-column__body {
+  font-size: 0.82em;
+  line-height: 1.4;
+}
+
+.reveal .slide-column__body > :first-child {
+  margin-top: 0;
+}
+
+.reveal .slide-column__body > :last-child {
+  margin-bottom: 0;
+}
+
 /* Slides with background images: let text sit on a readable scrim. */
 .reveal .slide-background-content {
   background-color: transparent;

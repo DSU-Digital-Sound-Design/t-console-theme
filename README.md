@@ -267,6 +267,20 @@ the body type and list spacing while leaving the title unchanged:
 - Second point
 ```
 
+Use `slide-columns` with two `slide-column` children for a side-by-side
+comparison:
+
+```md
+{{< slide-columns >}}
+{{< slide-column title="First idea" >}}
+Markdown for the first column.
+{{< /slide-column >}}
+{{< slide-column title="Second idea" >}}
+Markdown for the second column.
+{{< /slide-column >}}
+{{< /slide-columns >}}
+```
+
 ## How "today" works
 
 Hugo stamps the build date into the page and marks the current week, the current
