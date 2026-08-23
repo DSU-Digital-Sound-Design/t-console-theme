@@ -8,6 +8,8 @@
     - [due] Project 3 by midnight
       - indented bullets       detail notes under the item above
     ### Critique session       a sub-heading renders as an untagged item
+    ### homework               splits the day: items after it render below a
+                               "homework" divider. Not counted as an item.
     Item text is inline Markdown, so links and emphasis work.
     Anything before the first `##` is intro prose.
     Lines inside a day that are none of the above are skipped with a warning.
@@ -96,6 +98,7 @@
       {{- /* An indented bullet is detail hanging off the item above it. */ -}}
       {{- $its := $cur.items -}}
       {{- $last := index $its (sub (len $its) 1) -}}
+      {{- if $last.split }}{{ warnf "schedule: an indented bullet directly follows a `### homework` divider and has nothing to attach to (day %q)" $cur.iso }}{{ end -}}
       {{- $last = merge $last (dict "notes" ($last.notes | append
             ($page.RenderString (dict "display" "inline") $body))) -}}
       {{- $cur = merge $cur (dict "items"
@@ -132,19 +135,27 @@
           "plain" (trim (htmlUnescape (plainify ($page.RenderString (dict "display" "inline") $body))) " \n")
           "tag" $tag
           "notes" slice
+          "split" false
           "label" (cond (eq $tag "") "·" $tag)) -}}
     {{- $cur = merge $cur (dict "items" $items) -}}
     {{- end -}}
 
   {{- else if and $cur (hasPrefix $t "### ") -}}
     {{- $body := trim (strings.TrimPrefix "### " $t) " " -}}
-    {{- $sc.Add "total" 1 -}}
-    {{- $cur = merge $cur (dict "items" ($cur.items | append (dict
-          "text" ($page.RenderString (dict "display" "inline") $body)
-          "plain" (trim (htmlUnescape (plainify ($page.RenderString (dict "display" "inline") $body))) " \n")
-          "tag" ""
-          "notes" slice
-          "label" "·"))) -}}
+    {{- if eq (lower $body) "homework" -}}
+      {{- /* A divider, not an item: it splits the day and is not counted. */ -}}
+      {{- $cur = merge $cur (dict "items" ($cur.items | append (dict
+            "text" "" "plain" "" "tag" "" "notes" slice "split" true "label" ""))) -}}
+    {{- else -}}
+      {{- $sc.Add "total" 1 -}}
+      {{- $cur = merge $cur (dict "items" ($cur.items | append (dict
+            "text" ($page.RenderString (dict "display" "inline") $body)
+            "plain" (trim (htmlUnescape (plainify ($page.RenderString (dict "display" "inline") $body))) " \n")
+            "tag" ""
+            "notes" slice
+            "split" false
+            "label" "·"))) -}}
+    {{- end -}}
 
   {{- else if and (not $started) (ne $t "") -}}
     {{- $intro = $intro | append $line -}}
@@ -195,12 +206,12 @@
     {{- end -}}
 
     {{- $heads := slice -}}
-    {{- range $wdays }}{{ with .items }}{{ $heads = $heads | append (index . 0).plain }}{{ end }}{{ end -}}
+    {{- range $wdays }}{{ with (where .items "split" false) }}{{ $heads = $heads | append (index . 0).plain }}{{ end }}{{ end -}}
 
     {{- /* For the "Coming up" card: the first thing that actually happens,
            skipping tags flagged as non-events (No class, and friends). */ -}}
     {{- $notable := "" -}}
-    {{- range $wdays }}{{ range .items -}}
+    {{- range $wdays }}{{ range (where .items "split" false) -}}
       {{- if and (eq $notable "") (not (in $skipTags .tag)) }}{{ $notable = .plain }}{{ end -}}
     {{ end }}{{ end -}}
 
@@ -239,17 +250,17 @@
 
 {{- $card1 := false -}}
 {{- range $d := $tagged -}}
-  {{- if and (not $card1) (eq $d.iso $iso) $d.items -}}
+  {{- if and (not $card1) (eq $d.iso $iso) (where $d.items "split" false) -}}
     {{- $card1 = dict "kicker" "Today"
-          "title" (index $d.items 0).plain
+          "title" (index (where $d.items "split" false) 0).plain
           "meta" (printf "Week %d · %s %s" $d.wn $d.label $d.short) -}}
   {{- end -}}
 {{- end -}}
 {{- if not $card1 -}}
   {{- range $d := $tagged -}}
-    {{- if and (not $card1) (ge $d.iso $iso) $d.items -}}
+    {{- if and (not $card1) (ge $d.iso $iso) (where $d.items "split" false) -}}
       {{- $card1 = dict "kicker" "Next class"
-            "title" (index $d.items 0).plain
+            "title" (index (where $d.items "split" false) 0).plain
             "meta" (printf "Week %d · %s %s" $d.wn $d.label $d.short) -}}
     {{- end -}}
   {{- end -}}

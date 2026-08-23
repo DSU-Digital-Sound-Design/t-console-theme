@@ -569,6 +569,46 @@ h1, h2, h3, p, ul, ol, figure { margin: 0; }
   color: var(--fg-faint);
 }
 .item__notes a { color: var(--fg-nav); border-bottom: 1px solid var(--rule-link); }
+
+/* A deadline named inside an item ("due Wed 9/16", "for Monday"). Boxed like a
+   tag but uncoloured — the tag chips already own the page's colour, so this
+   reads by shape and weight instead of adding another hue. */
+.item__due {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-bright);
+  border: 1px solid color-mix(in srgb, var(--fg-mute) 45%, transparent);
+  background: var(--panel);
+  padding: 1px 5px;
+  white-space: nowrap;
+}
+
+/* Divides a day's in-class work from what students take home. Written by the
+   author as `### homework`; see _partials/schedule-ctx.html. Indented to the
+   text column so it starts where the item text starts. */
+.day__split {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 6px 0 2px;
+  padding-left: calc(var(--tag-col, 62px) + 12px);
+}
+.day__split span {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-mute);
+  flex: none;
+}
+/* Same token as the week separators, so every hairline on the page matches. */
+.day__split::after {
+  content: "";
+  flex: 1;
+  border-top: 1px solid var(--rule);
+}
 .item__notes iframe { max-width: 100%; margin-top: 8px; border: 1px solid var(--rule-panel); }
 
 .sched__final {

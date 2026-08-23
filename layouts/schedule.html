@@ -52,19 +52,31 @@
           <div class="day__today">TODAY</div>
         </div>
         <div class="day__items">
-          {{ range .items }}
+          {{- /* A `### homework` line in the day splits it: whatever follows the
+                 marker renders below the divider, in the order it was written.
+
+                 Separately, a deadline named in an item ("due Wed 9/16", "for
+                 Monday", "before Friday") is set in a chip so the date is easy
+                 to spot. That is presentation only and decides nothing. */ -}}
+          {{- $dueRE := `(?i)\b(due|for|before|by)\s+((?:mon|tues?|wed(?:nes)?|thur?s?|fri|sat|sun)(?:day)?(?:\s+\d{1,2}/\d{1,2})?|\d{1,2}/\d{1,2}|today|class)\b` -}}
+          {{- $mark := `<span class="item__due">$1 $2</span>` -}}
+          {{- range .items -}}
+            {{- if .split -}}
+          <div class="day__split"><span>homework</span></div>
+            {{- else -}}
           <div class="item"{{ with .tag }} data-tag="{{ . }}"{{ end }}>
             <span class="item__tag"{{ with .tag }} data-tag="{{ . }}"{{ end }}>{{ .label }}</span>
             <span class="item__body">
-              <span class="item__text">{{ .text }}</span>
+              <span class="item__text">{{ replaceRE $dueRE $mark (string .text) | safeHTML }}</span>
               {{ with .notes }}
               <ul class="item__notes">
-                {{ range . }}<li>{{ . }}</li>{{ end }}
+                {{ range . }}<li>{{ replaceRE $dueRE $mark (string .) | safeHTML }}</li>{{ end }}
               </ul>
               {{ end }}
             </span>
           </div>
-          {{ end }}
+            {{- end -}}
+          {{- end }}
         </div>
       </div>
       {{ end }}
