@@ -1,0 +1,17 @@
+{{/*
+  reveal-hugo's documented per-site <head> hook for lecture decks, provided
+  by t-console-theme so every course site inherits it. Sites must NOT ship
+  their own copy of this partial — a site-level version shadows this one.
+
+  The deck theme (static/reveal-console.css) shares its palette with the
+  t-console-theme course pages. The accent lands here from hugo.toml's
+  params.accent so each course keeps its own color without a per-site
+  stylesheet fork.
+*/}}
+{{- with site.Params.accent }}
+<style>:root { --a: {{ . | safeCSS }}; }</style>
+{{- end }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="{{ "presenter-mode.css" | relURL }}">

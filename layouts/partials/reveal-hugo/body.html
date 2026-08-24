@@ -1,0 +1,20 @@
+{{/*
+  reveal-hugo's per-site end-of-body hook, provided by t-console-theme so
+  every course site inherits it. Sites must NOT ship their own copy of this
+  partial — a site-level version shadows this one.
+
+  Slides tagged {{< slide class="stepped" >}} reveal their top-level
+  bullets one at a time. The class comes from the slide shortcode; this
+  turns each bullet into a Reveal fragment without per-item markup.
+*/}}
+<script>
+  document.querySelectorAll('.reveal .slides section.stepped > ul > li').forEach(function (li) {
+    li.classList.add('fragment');
+  });
+</script>
+{{/*
+  Presenter mode: single-computer presenting (press P in a deck).
+  Inert unless invoked, so student-facing decks behave exactly as before.
+  See docs/adr/0001 and docs/adr/0002.
+*/}}
+<script src="{{ "presenter-mode.js" | relURL }}"></script>
