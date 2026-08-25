@@ -1,0 +1,16 @@
+{{- /* Embedded Web Audio widget for Reveal decks (see static/audio-demos.js).
+
+  {{< audio-demo type="sine" >}}           freq/amp/phase sliders + scope
+  {{< audio-demo type="adsr" >}}           A/D/S/R sliders + trigger
+  {{< audio-demo type="harmonics" >}}      8 partial sliders + presets
+  {{< audio-demo type="phase" >}}          two oscillators, beats, cancellation
+
+  Optional: freq="220" (starting Hz), compact="true" (shorter canvas).
+*/ -}}
+{{- $type := .Get "type" -}}
+{{- if not (in (slice "sine" "adsr" "harmonics" "phase") $type) -}}
+  {{- errorf "audio-demo: unknown type %q: %s" $type .Position -}}
+{{- end -}}
+<div class="audio-demo{{ if eq (.Get "compact") "true" }} audio-demo--compact{{ end }}" data-demo="{{ $type }}" data-freq="{{ or (.Get "freq") 220 }}">
+  <p class="audio-demo__fallback">Interactive audio demo — requires JavaScript.</p>
+</div>

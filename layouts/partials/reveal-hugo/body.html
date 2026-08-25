@@ -18,3 +18,8 @@
   See docs/adr/0001 and docs/adr/0002.
 */}}
 <script src="{{ "presenter-mode.js" | relURL }}"></script>
+{{/*
+  Web Audio widgets for {{< audio-demo >}} slides. Self-noops instantly on
+  decks without demos, so the unconditional load costs ~nothing.
+*/}}
+<script src="{{ "audio-demos.js" | relURL }}"></script>

@@ -556,3 +556,115 @@
   margin-top: 1.2em;
   border-top: 1px solid var(--rule);
 }
+
+/* --------------------------------------------------------------------------
+   Audio demos — {{< audio-demo type="..." >}} widgets (static/audio-demos.js)
+   Panel treatment echoes blockquotes: panel ground, hairline border, accent
+   left rule. Everything runs small — the deck base is 38px.
+   -------------------------------------------------------------------------- */
+
+.reveal .audio-demo {
+  background: var(--panel);
+  border: 1px solid var(--rule-panel);
+  border-left: 3px solid var(--a);
+  padding: 0.35em 0.55em;
+  margin: 0.4em auto 0;
+  font-family: var(--mono);
+  font-size: 0.55em;
+  line-height: 1.3;
+}
+
+.reveal .audio-demo__fallback {
+  color: var(--fg-mute);
+  margin: 0;
+}
+
+.reveal .audio-demo__scope {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  margin: 0 0 0.35em;
+}
+
+.reveal .audio-demo__controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 1.2em;
+  row-gap: 0.15em;
+}
+
+.reveal .audio-demo--compact .audio-demo__controls {
+  column-gap: 0.8em;
+}
+
+.reveal .audio-demo__row {
+  display: grid;
+  grid-template-columns: 4.5em minmax(0, 1fr) auto;
+  gap: 0.5em;
+  align-items: center;
+}
+
+.reveal .audio-demo__label {
+  color: var(--fg-label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.85em;
+}
+
+.reveal .audio-demo__readout {
+  color: var(--a);
+  font-size: 0.85em;
+  white-space: nowrap;
+  text-align: right;
+  min-width: 4em;
+}
+
+.reveal .audio-demo input[type="range"] {
+  accent-color: var(--a);
+  min-width: 0;
+  height: 0.9em;
+}
+
+.reveal .audio-demo input[type="checkbox"] {
+  accent-color: var(--a);
+  justify-self: start;
+}
+
+.reveal .audio-demo__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+  margin-top: 0.35em;
+}
+
+.reveal .audio-demo__btn {
+  font-family: var(--mono);
+  font-size: 0.85em;
+  color: var(--a);
+  background: transparent;
+  border: 1px solid var(--rule-link);
+  border-radius: 3px;
+  padding: 0.25em 0.8em;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.reveal .audio-demo__btn:hover {
+  border-color: var(--a);
+  color: var(--fg-bright);
+}
+
+.reveal .audio-demo__btn.is-active {
+  background: var(--a);
+  color: var(--bg);
+  border-color: var(--a);
+}
+
+.reveal .audio-demo__caption {
+  color: var(--fg-mute);
+  font-size: 0.8em;
+  margin: 0.3em 0 0;
+}
